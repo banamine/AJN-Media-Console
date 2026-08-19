@@ -1,0 +1,20 @@
+[
+  {
+    "channelId": "mux-ch-3",
+    "num": 3,
+    "name": "📅 CH 3: Infowars Nightly News (IA)",
+    "category": "Nightly News",
+    "logo": "https://dn720602.ca.archive.org/0/items/daily-highlights/Daily%20Highlights.png",
+    "type": "ia_collection",
+    "source": "infowars-nightly-news-sd"
+  },
+  {
+    "channelId": "mux-ch-11",
+    "num": 11,
+    "name": "📁 CH 11: InfoWars Archive (IA)",
+    "category": "InfoWars Archive",
+    "logo": "https://dn720602.ca.archive.org/0/items/daily-highlights/Special%20Report.png.png",
+    "type": "ia_collection",
+    "source": "alex-jones-infowars-archives"
+  }
+]

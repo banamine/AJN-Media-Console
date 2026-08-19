@@ -1,0 +1,9 @@
+{
+  "channelId": "mux-ch-9",
+  "num": 9,
+  "name": "🇺🇸 CH 9: NEWSMAX BACKUP",
+  "category": "IPTV",
+  "logo": "https://1a-1791.com/video/z8/1/u/n/b/1unba.baa.1-NewsmaxTV-qu1fdv.jpeg",
+  "type": "default",
+  "source": "getBackupStreamUrl(https://rumble.com/live-hls-dvr/jvVgrKOVyc8/playlist.m3u8?key=6Nz5sx4bc1BNTaSoa_vDPS_NlDOmrU99uyfR8a45_mKKHi7uQjJ48w)"
+}

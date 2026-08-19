@@ -1,0 +1,73 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.cardContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: #080c14;
+  border: 1px solid rgba(30, 41, 59, 0.8);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 180px;
+  user-select: none;
+  transform: translateZ(0);
+}
+
+.cardContainer img {
+  image-rendering: -webkit-optimize-contrast;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Increase legibility for TV interfaces within the card */
+.cardContainer :global(.text-\[8px\]),
+.cardContainer :global(.text-\[9px\]) {
+  font-size: 11px !important;
+}
+
+.cardContainer:hover {
+  border-color: rgba(16, 185, 129, 0.6);
+  box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.15);
+  transform: scale(1.02) translateZ(0);
+}
+
+.dragOver {
+  border-color: #10b981 !important;
+  background-color: rgba(16, 185, 129, 0.08) !important;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3) inset;
+}
+
+.slotHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: rgba(15, 23, 42, 0.9);
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+}
+
+.slotBadge {
+  color: #10b981;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.emptySlot {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  border: 1px dashed rgba(51, 65, 85, 0.4);
+  margin: 8px;
+  border-radius: 8px;
+}

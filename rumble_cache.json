@@ -1,0 +1,18 @@
+{
+  "https://rumble.com/v60552h-newsmax2-live-real-news-for-real-people.html": {
+    "title": "Newsmax 2 Live",
+    "thumbnail_url": "https://raw.githubusercontent.com/banamine/AJN-Resource-Hub/main/ajn_logo.png",
+    "duration": 7200,
+    "html": "<iframe src=\"https://rumble.com/embed/v5xwnen/?pub=15son\" width=\"100%\" height=\"100%\" frameborder=\"0\" allowfullscreen></iframe>",
+    "embed_url": "https://rumble.com/embed/v5xwnen/?pub=15son",
+    "isLive": true
+  },
+  "https://rumble.com/v7bs5m6-alex-jones-show-247.html": {
+    "title": "AJN Live 24/7 (Alex Jones Show 24/7)",
+    "thumbnail_url": "https://raw.githubusercontent.com/banamine/AJN-Resource-Hub/main/ajn_logo.png",
+    "duration": 7200,
+    "html": "<iframe src=\"https://rumble.com/embed/v77ec70/?pub=15son\" width=\"100%\" height=\"100%\" frameborder=\"0\" allowfullscreen></iframe>",
+    "embed_url": "https://rumble.com/embed/v77ec70/?pub=15son",
+    "isLive": true
+  }
+}

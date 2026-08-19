@@ -1,0 +1,12 @@
+/* DailyView Custom Styles */
+.daily-timeline-hour {
+  position: relative;
+}
+.daily-timeline-hour::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  left: 64px;
+  bottom: 0;
+  border-bottom: 1px dashed rgba(148, 163, 184, 0.12);
+}

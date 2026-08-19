@@ -1,0 +1,53 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.sidebarContainer {
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  background: rgba(8, 12, 20, 0.92);
+  backdrop-filter: blur(16px);
+  border-right: 1px solid rgba(30, 41, 59, 0.8);
+  user-select: none;
+  min-height: 0;
+}
+
+.folderItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  margin: 2px 8px;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.folderItem:hover {
+  background: rgba(15, 23, 42, 0.8);
+  color: #f8fafc;
+  border-color: rgba(51, 65, 85, 0.6);
+}
+
+.activeFolder {
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #10b981 !important;
+  border-color: rgba(16, 185, 129, 0.4) !important;
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.15);
+}
+
+.systemBadge {
+  font-size: 9px;
+  color: #fbbf24;
+  background: rgba(180, 83, 9, 0.3);
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}

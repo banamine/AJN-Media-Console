@@ -1,0 +1,67 @@
+[
+  {
+    "channelId": "ch-201",
+    "num": 201,
+    "name": "👽 Ancient Aliens",
+    "category": "Classics",
+    "logo": "https://archive.org/download/daily-highlights/lmbsa.png",
+    "type": "ia_collection",
+    "source": "https://archive.org/download/daily-highlights/Ancient%20Aliens.json"
+  },
+  {
+    "channelId": "ch-202",
+    "num": 202,
+    "name": "🕵️ 70s Odd Couple",
+    "category": "Classics",
+    "logo": "https://archive.org/download/daily-highlights/lmbsa.png",
+    "type": "m3u_playlist",
+    "streamUrl": "https://archive.org/download/daily-highlights/70%20Odd%20Couple.m3u"
+  },
+  {
+    "channelId": "ch-203",
+    "num": 203,
+    "name": "🇺🇸 American Experience",
+    "category": "Classics",
+    "logo": "https://archive.org/download/daily-highlights/lmbsa.png",
+    "type": "m3u_playlist",
+    "streamUrl": "https://archive.org/download/daily-highlights/American%20Experience.m3u"
+  },
+  {
+    "channelId": "the-honeymooners-classic",
+    "num": 204,
+    "name": "The Honeymooners",
+    "category": "Classic TV / Movies",
+    "logo": "https://archive.org/download/daily-highlights/lmbsa.png",
+    "type": "m3u_playlist",
+    "streamUrl": "https://archive.org/download/daily-highlights/honeymooner%20classic%20movies.m3u",
+    "manifestFallbackUrl": "https://archive.org/download/daily-highlights/honey%20mooners%20classic%20movies.json",
+    "provider": "Archive.org (Daily Highlights)"
+  },
+  {
+    "channelId": "ch-205",
+    "num": 205,
+    "name": "🎬 Classic Movies",
+    "category": "Classics",
+    "logo": "https://archive.org/download/daily-highlights/lmbsa.png",
+    "type": "m3u_playlist",
+    "streamUrl": "https://archive.org/download/daily-highlights/Classic%20Movies.m3u"
+  },
+  {
+    "channelId": "ch-206",
+    "num": 206,
+    "name": "✈️ MAYDAY",
+    "category": "Classics",
+    "logo": "https://archive.org/download/daily-highlights/lmbsa.png",
+    "type": "m3u_playlist",
+    "streamUrl": "https://archive.org/download/daily-highlights/MAYDAY.m3u"
+  },
+  {
+    "channelId": "ch-207",
+    "num": 207,
+    "name": "🔍 Project Veritas",
+    "category": "Classics",
+    "logo": "https://archive.org/download/daily-highlights/lmbsa.png",
+    "type": "m3u_playlist",
+    "streamUrl": "https://archive.org/download/daily-highlights/Project%20Veritas.m3u"
+  }
+]

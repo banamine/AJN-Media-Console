@@ -1,0 +1,8 @@
+{
+  "name": "AJN Audio  Podcast Engine",
+  "description": "A cinematic podcast and radio UI featuring a live audio visualizer, seamless video switching, and deep broadcast design language.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "channelId": "mux-ch-1",
+  "num": 1,
+  "name": "📅 CH 1: Warroom (Video RSS)",
+  "category": "Daily View",
+  "logo": "https://archive.org/download/daily-highlights/warroom.png",
+  "type": "rss",
+  "source": "https://rss.alexjones.media/AJNHourlyVideo.xml",
+  "description": "Harrison Smith, an 8th-generation Texan, hosts the show. It features political commentary, current events analysis, guest interviews, and listener calls."
+}

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <video id="v" controls width="800" src="/api/stream-proxy?url=https%3A%2F%2Fcommondatastorage.googleapis.com%2Fgtv-videos-bucket%2Fsample%2FBigBuckBunny.mp4"></video>
+  <div id="res">Waiting...</div>
+  <script>
+    const v = document.getElementById('v');
+    v.addEventListener('canplay', () => { document.getElementById('res').innerText = 'CANPLAY'; });
+    v.addEventListener('error', (e) => { document.getElementById('res').innerText = 'ERROR: ' + v.error.message; });
+    v.muted = true;
+    v.play().catch(e => console.log(e));
+  </script>
+</body>
+</html>

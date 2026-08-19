@@ -1,0 +1,75 @@
+{
+  "types": {
+    "warroom": {
+      "type": "warroom",
+      "name": "War Room",
+      "icon": "🛡️",
+      "thumbnail": "https://archive.org/download/daily-highlights/warroom.png",
+      "color": "#FF3B30",
+      "description": "Alex Jones War Room Daily Broadcasts"
+    },
+    "alexjones": {
+      "type": "alexjones",
+      "name": "Alex Jones",
+      "icon": "👤",
+      "thumbnail": "https://archive.org/download/daily-highlights/gettyimages-1796841914.webp",
+      "color": "#FFD700",
+      "description": "The Alex Jones Show"
+    },
+    "live": {
+      "type": "live",
+      "name": "Live",
+      "icon": "🔴",
+      "thumbnail": "https://archive.org/download/daily-highlights/liberty%20moonlight.png",
+      "color": "#FF2D55",
+      "description": "Live Broadcasts"
+    },
+    "emergency": {
+      "type": "emergency",
+      "name": "Emergency",
+      "icon": "🚨",
+      "thumbnail": "https://archive.org/download/daily-highlights/emegency.png",
+      "color": "#FF9500",
+      "description": "Emergency Broadcast System"
+    },
+    "archive": {
+      "type": "archive",
+      "name": "Classic Archive",
+      "icon": "📦",
+      "thumbnail": "https://archive.org/download/daily-highlights/old-tv-television-empty-screen-2-cover.jpg",
+      "color": "#34C759",
+      "description": "Historical & Classic Episodes"
+    },
+    "daily": {
+      "type": "daily",
+      "name": "Daily Highlights",
+      "icon": "📅",
+      "thumbnail": "https://archive.org/download/daily-highlights/web%20app1.png",
+      "color": "#007AFF",
+      "description": "Daily Show Highlights"
+    },
+    "special": {
+      "type": "special",
+      "name": "Special Report",
+      "icon": "⭐",
+      "thumbnail": "https://archive.org/download/daily-highlights/emegency.png",
+      "color": "#AF52DE",
+      "description": "Special Reports & Events"
+    },
+    "audio": {
+      "type": "audio",
+      "name": "Audio",
+      "icon": "🎵",
+      "thumbnail": "https://dn720602.ca.archive.org/0/items/daily-highlights/Classic%20Archive.png",
+      "color": "#FFCC00",
+      "description": "Audio Only / Podcasts"
+    }
+  },
+  "settings": {
+    "defaultType": "archive",
+    "resizeMode": "cover",
+    "imageWidth": 400,
+    "imageHeight": 600,
+    "fallbackImage": "https://archive.org/download/daily-highlights/liberty%20moonlight.png"
+  }
+}

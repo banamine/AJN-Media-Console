@@ -1,0 +1,35 @@
+[
+  {
+    "id": "live-ajn",
+    "channelId": "live-ajn",
+    "num": 1,
+    "name": "🔴 AJN Live",
+    "category": "Live Channels",
+    "logo": "https://dn720602.ca.archive.org/0/items/daily-highlights/PlaceCard%20thumbnails%20Live%20Transmission.jpg",
+    "m3uRef": "mux-live-ajn",
+    "offsetIndex": 0,
+    "url": "https://rumble.com/embed/v79lfxq/?pub=15son",
+    "streamUrl": "https://rumble.com/embed/v79lfxq/?pub=15son",
+    "type": "live_hls",
+    "streamType": "live_hls",
+    "source": "https://rumble.com/embed/v79lfxq/?pub=15son",
+    "backupSource": "getBackupStreamUrl()",
+    "isPermanent": true
+  },
+  {
+    "id": "live-warroom",
+    "channelId": "live-warroom",
+    "num": 2,
+    "name": "🔴 Warroom Live",
+    "category": "Live Channels",
+    "logo": "https://dn720602.ca.archive.org/0/items/daily-highlights/warroom.png",
+    "m3uRef": "mux-live-warroom",
+    "offsetIndex": 0,
+    "url": "https://rumble.com/embed/v79lfxq/?pub=15son",
+    "streamUrl": "https://rumble.com/embed/v79lfxq/?pub=15son",
+    "type": "rumble",
+    "source": "https://rumble.com/embed/v79lfxq/?pub=15son",
+    "backupSource": "getBackupStreamUrl()",
+    "isPermanent": true
+  }
+]

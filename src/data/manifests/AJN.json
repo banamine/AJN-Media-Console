@@ -1,0 +1,12 @@
+{
+  "channelId": "mux-ch-2",
+  "num": 2,
+  "name": "🚀 CH 2: AJN Live (Broadscast)",
+  "category": "AJN Live",
+  "logo": "https://archive.org/download/daily-highlights/Alex%20Jones%20Show.pngg",
+  "type": "live_hls",
+  "streamType": "live_hls",
+  "streamUrl": "https://rumble.com/embed/v79lfxq/?pub=15son",
+  "source": "https://rumble.com/embed/v79lfxq/?pub=15son",
+  "hlsSource": "https://rumble.com/embed/v79lfxq/?pub=15son"
+}

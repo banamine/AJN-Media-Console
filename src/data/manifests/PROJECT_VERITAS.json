@@ -1,0 +1,9 @@
+{
+  "channelId": "ch-pv-1",
+  "num": 15,
+  "name": "Project Veritas 24/7",
+  "category": "News",
+  "logo": "https://archive.org/download/projectveritasinsidergoogle/projectveritasinsidergoogle.thumbs/Project-Veritas-Insider-Google_000295.jpg",
+  "type": "ia_collection",
+  "source": "/PROJECT_VERITAS_FEED.json"
+}

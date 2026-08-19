@@ -1,0 +1,74 @@
+[
+  {
+    "channelId": "mux-ch-4",
+    "num": 4,
+    "name": "\ud83d\udea8 CH 4: AJN Special Report (IA)",
+    "category": "Special Report",
+    "logo": "https://archive.org/download/daily-highlights/lmbsa.png",
+    "type": "ia_collection",
+    "source": "20101113-alex-cocoanut-oct-24"
+  },
+  {
+    "channelId": "mux-ch-5",
+    "num": 5,
+    "name": "\ud83d\uddf3\ufe0f CH 5: Special Election Coverage 2020 (IA)",
+    "category": "Election 2020",
+    "logo": "https://archive.org/download/daily-highlights/lmbsa.png",
+    "type": "ia_collection",
+    "source": "infowars-special-election-coverage-2020"
+  },
+  {
+    "channelId": "mux-ch-7",
+    "num": 7,
+    "name": "\ud83d\udcc5 CH 7: War Room (Archive)",
+    "category": "War Room Archive",
+    "logo": "https://archive.org/download/daily-highlights/lmbsa.png",
+    "type": "ia_collection",
+    "source": "https://archive.org/download/daily-highlights/AJN%20ARCHIVE.json"
+  },
+  {
+    "channelId": "mux-ch-8",
+    "num": 8,
+    "name": "\ud83c\udfac CH 8: Classic Docs (IA)",
+    "category": "Classic Docs",
+    "logo": "https://archive.org/download/daily-highlights/lmbsa.png",
+    "type": "ia_collection",
+    "source": "infowars-police-state-docs"
+  },
+  {
+    "channelId": "mux-ch-10",
+    "num": 10,
+    "name": "\ud83e\udd4a CH 10: Red Voice Media (Embed)",
+    "category": "Embeds",
+    "logo": "https://archive.org/download/daily-highlights/lmbsa.png",
+    "type": "default",
+    "source": "getBackupStreamUrl()"
+  },
+  {
+    "channelId": "mux-ch-12",
+    "num": 12,
+    "name": "\ud83c\udf99\ufe0f CH 12: The David Knight Show (IA)",
+    "category": "David Knight",
+    "logo": "https://archive.org/download/daily-highlights/lmbsa.png",
+    "type": "ia_collection",
+    "source": "infowars-special-election-coverage-2020/The David Knight Show"
+  },
+  {
+    "channelId": "mux-ch-13",
+    "num": 13,
+    "name": "\ud83d\udea8 CH 13: AJN Archive",
+    "category": "Archive",
+    "logo": "https://archive.org/download/daily-highlights/lmbsa.png",
+    "type": "ia_collection",
+    "source": "https://archive.org/download/daily-highlights/AJN%20ARCHIVE.json"
+  },
+  {
+    "channelId": "mux-ch-14",
+    "num": 14,
+    "name": "\ud83d\udcfa CH 14: Reality Channels",
+    "category": "Reality",
+    "logo": "https://archive.org/download/daily-highlights/lmbsa.png",
+    "type": "ia_collection",
+    "source": "https://archive.org/download/daily-highlights/Reality%20Channels.json"
+  }
+]

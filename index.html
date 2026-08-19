@@ -8,13 +8,21 @@
     <meta name="theme-color" content="#05080f" />
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/banamine/AJN-Resource-Hub/main/ajn_logo.png">
     <style>
-      body, html { margin: 0; padding: 0; background: #000; color: #fff; width: 100%; min-height: 100vh; }
-      #root { width: 100%; min-height: 100vh; }
-      #unified-player-app { min-height: 100vh; display: flex; flex-direction: column; background: #000000; color: #e2e8f0; font-family: system-ui, sans-serif; overflow-x: hidden; user-select: none; }
+      /* P0 fix: html/body/#root previously used min-height: 100vh with no overflow
+         constraint, so nothing stopped the document from growing taller than the
+         viewport whenever any deeply-nested content overflowed its box (a large
+         playlist, a long EPG list, etc) - the whole page would balloon and the
+         browser's own scrollbar would take over instead of the intended internal
+         panel scrolling. Locking these to the viewport height with overflow hidden
+         makes the app-shell truly viewport-locked: only elements that explicitly
+         opt into overflow-y-auto (the playlist/EPG panels) can ever scroll. */
+      body, html { margin: 0; padding: 0; background: #000; color: #fff; width: 100%; height: 100%; overflow: hidden; }
+      #root { width: 100%; height: 100%; overflow: hidden; }
+      #unified-player-app { height: 100vh; display: flex; flex-direction: column; background: #000000; color: #e2e8f0; font-family: system-ui, sans-serif; overflow: hidden; user-select: none; }
       .video-container { width: 100%; height: 100%; background: #000; }
     </style>
   </head>
-  <body style="background-color: #05080f; color: #ffffff; min-height: 100vh;">
+  <body style="background-color: #05080f; color: #ffffff; height: 100%; overflow: hidden;">
     <div id="root">
       <style>
         .ajn-app-shell { display: flex; flex-direction: column; height: 100vh; background: #05080f; color: #fff; font-family: system-ui, sans-serif; align-items: center; justify-content: center; }

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { PlayerStore, PlayerState } from "../types";
-import { isRumbleUrl, isYouTubeUrl } from "../utils/urlUtils";
+import { isRumbleUrl, isYouTubeUrl, isCustomRotationChannelUrl } from "../utils/urlUtils";
 import { cleanTitle } from "../utils/titleCleaner";
 
 export const VALID_TRANSITIONS: Record<PlayerState, PlayerState[]> = {
@@ -42,7 +42,7 @@ export function usePlayer({ addLog }: UsePlayerOptions) {
   });
 
   // Derived selectors
-  const isEmbed = isRumbleUrl(playerStore.currentUrl) || isYouTubeUrl(playerStore.currentUrl);
+  const isEmbed = isRumbleUrl(playerStore.currentUrl) || isYouTubeUrl(playerStore.currentUrl) || isCustomRotationChannelUrl(playerStore.currentUrl);
   const isPlaying = playerStore.state === "playing" || isEmbed;
   const isLoading = !isEmbed && (playerStore.state === "loading" || playerStore.state === "mounting" || playerStore.state === "attaching" || playerStore.state === "recovering");
   const isBuffering = !isEmbed && playerStore.state === "buffering";
@@ -185,7 +185,7 @@ export function usePlayer({ addLog }: UsePlayerOptions) {
 
   // Loading timeout watchdog with retry logic
   useEffect(() => {
-    if (isRumbleUrl(playerStore.currentUrl) || isYouTubeUrl(playerStore.currentUrl)) return;
+    if (isRumbleUrl(playerStore.currentUrl) || isYouTubeUrl(playerStore.currentUrl) || isCustomRotationChannelUrl(playerStore.currentUrl)) return;
     const isPending = ["mounting", "attaching", "loading", "recovering"].includes(playerStore.state);
     if (!isPending) return;
 

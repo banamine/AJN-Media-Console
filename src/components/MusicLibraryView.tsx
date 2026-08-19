@@ -668,7 +668,7 @@ export const MusicLibraryView = React.memo(function MusicLibraryView({
         </div>
 
         {/* 3. TRACKS LIST SHELF */}
-        <div className="flex-1 min-h-0 overflow-y-auto space-y-2 mt-1 pr-1" id="music-track-list">
+        <div className="flex-1 min-h-0 overflow-y-auto max-h-[50vh] overscroll-contain space-y-2 mt-1 pr-1" id="music-track-list">
           {libraryLoading ? (
             <div className="h-48 flex items-center justify-center flex-col gap-2">
               <div className="w-8 h-8 rounded-full border-2 border-slate-800 border-t-blue-500 animate-spin" />

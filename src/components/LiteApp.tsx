@@ -1104,7 +1104,7 @@ export const LiteApp = React.memo(function LiteApp({
     <div
       id="unified-player-app"
       onPointerDown={handleFirstInteractionUnmute}
-      className={`h-screen overflow-hidden flex flex-col font-sans transition-all duration-300 antialiased select-none ${theme === "light" ? "text-slate-800 bg-slate-50" : "text-slate-200 bg-[#000000]"}`}
+      className={`min-h-screen flex flex-col font-sans transition-all duration-300 antialiased select-none ${theme === "light" ? "text-slate-800 bg-slate-50" : "text-slate-200 bg-[#000000]"}`}
     >
       {/* P0 fix: this was min-h-screen (a floor, no ceiling) with no overflow
           constraint, so the whole page could grow past the viewport whenever

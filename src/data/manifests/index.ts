@@ -1,4 +1,5 @@
 import { createRumbleChannel, validateChannelManifests } from "../../utils/rumbleFactory";
+import { NEW_WORLD_ORDER_CHANNEL_URL } from "../../utils/urlUtils";
 
 const AJN_LIVE = createRumbleChannel({
   channelId: "ch-ajn-live",
@@ -78,6 +79,24 @@ const SURVIVAL = createRumbleChannel({
   description: "Survival Against Impossible Odds Documentary Series",
 });
 
+// New World Order - simulated 24/7 rotating channel sourced from the New World Order: Blueprint
+// Of Madmen Rumble library. `source`/`url` is the internal sentinel (NOT a real fetchable URL) -
+// LiteApp.tsx detects it via currentChannel.renderMode === "custom-rumble-rotation" and mounts
+// the dedicated NewWorldOrderChannel component (Rumble JS SDK, deterministic wall-clock rotation,
+// smooth loadVideo() transitions, title overlays) instead of treating it as a normal stream.
+// type: "live_hls" routes it through DefaultChannelProvider, which synthesizes a single continuous
+// guide block using this source url as-is - same mechanism AJN Live uses for its own embed url.
+const NEW_WORLD_ORDER = {
+  channelId: "ch-new-world-order",
+  num: 8,
+  name: "New World Order",
+  category: "Live Channels",
+  logo: "https://archive.org/download/daily-highlights/lmbsa.png",
+  type: "live_hls",
+  source: NEW_WORLD_ORDER_CHANNEL_URL,
+  description: "24/7 simulated broadcast rotating through the full New World Order: Blueprint Of Madmen Rumble library - a different video always running, like a real TV channel."
+};
+
 const HONEYMOONERS = {
   id: "the-honeymooners-classic",
   title: "The Honeymooners",
@@ -95,7 +114,8 @@ export const DefaultChannelManifests = [
   ARCHIVE_CHANNEL,
   SURVIVAL,
   HONEYMOONERS,
-  AJN_SPECIAL_REPORTS
+  AJN_SPECIAL_REPORTS,
+  NEW_WORLD_ORDER
 ];
 
 if (import.meta.env?.DEV) {

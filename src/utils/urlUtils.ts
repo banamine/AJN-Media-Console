@@ -167,4 +167,12 @@ export function detectStreamType(
   return "unknown";
 }
 
+export const NEW_WORLD_ORDER_CHANNEL_URL = "custom-rumble-rotation://new-world-order";
+
+export function isCustomRotationChannelUrl(url: string | null | undefined): boolean {
+  if (!url) return false;
+  return url.startsWith("custom-rumble-rotation://");
+}
+
+
 

@@ -339,7 +339,7 @@ export const TrackList: React.FC<TrackListProps> = ({
       </div>
 
       {/* Virtualized List Container */}
-      <div className="flex-1 select-none min-h-[150px]" aria-label="Virtualized Track List">
+      <div className="flex-1 select-none min-h-[150px] max-h-[50vh] overflow-y-auto overscroll-contain" aria-label="Virtualized Track List">
         {sortedTracks.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-8 h-[200px] text-slate-500 font-medium">
             <Music className="w-8 h-8 opacity-40 mb-2 animate-pulse" />

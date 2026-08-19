@@ -570,11 +570,13 @@ export const SmartVideoEngine: React.FC<SmartVideoEngineProps> = ({ url: initial
           </div>
         </div>
 
-        {/* Mobile Hamburger to open drawer */}
+        {/* Hamburger to open drawer */}
         {activeQueue.length > 0 && !isDrawerOpen && (
           <button 
             onClick={() => setIsDrawerOpen(true)}
-            className="md:hidden absolute top-4 right-4 z-40 p-2 bg-black/50 backdrop-blur rounded-lg border border-white/10 text-white"
+            onMouseEnter={() => setIsDrawerOpen(true)}
+            className="absolute top-4 right-4 z-40 p-2 bg-black/60 backdrop-blur rounded-lg border border-white/20 text-white shadow-lg cursor-pointer hover:bg-black/80 transition-all"
+            title="Open Playlist Drawer"
           >
             <Menu className="w-5 h-5" />
           </button>
@@ -583,10 +585,12 @@ export const SmartVideoEngine: React.FC<SmartVideoEngineProps> = ({ url: initial
       
       {/* Playlist UI Sidebar / Drawer */}
       {activeQueue.length > 0 && (
-        <div className={`
-          absolute md:relative top-0 right-0 h-full z-40 transition-transform duration-300
-          ${isDrawerOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'}
-          w-72 md:w-64 flex-shrink-0 bg-[#0a0f21]/95 md:bg-[#0a0f21] backdrop-blur md:backdrop-blur-none border-l md:border-none border-slate-800/80 flex flex-col overflow-hidden
+        <div 
+          onMouseLeave={() => setIsDrawerOpen(false)}
+          className={`
+          absolute top-0 right-0 h-full z-40 transition-transform duration-300 shadow-2xl
+          ${isDrawerOpen ? 'translate-x-0' : 'translate-x-full'}
+          w-72 md:w-64 flex-shrink-0 bg-[#0a0f21]/95 backdrop-blur border-l border-slate-800/80 flex flex-col overflow-hidden
         `}>
           <div className="p-3 border-b border-slate-800/80 bg-slate-900/50 flex flex-col gap-2">
             <div className="flex items-center justify-between">

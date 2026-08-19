@@ -1,6 +1,7 @@
 import { TelemetryAudit } from "../../utils/TelemetryAudit";
 import React, { useState, useMemo, useEffect } from "react";
 import { Search, Filter, LayoutGrid, List as ListIcon, Play, X, ChevronDown } from "lucide-react";
+import { LazyChannelLogo } from "../LazyChannelLogo";
 
 interface TVGuideSearchProps {
   channels: any[];
@@ -228,7 +229,7 @@ export const TVGuideSearch: React.FC<TVGuideSearchProps> = ({ channels, triggerP
                 >
                   <div className="h-[60%] bg-[#2d2d2d] relative overflow-hidden shrink-0">
                     {ch.logo ? (
-                      <img src={ch.logo} alt={ch.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <LazyChannelLogo src={ch.logo} alt={ch.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center p-4 bg-gradient-to-br from-[#2d2d2d] to-[#1a1a1a]">
                         <span className="font-bold text-white text-center line-clamp-2">{ch.name}</span>
@@ -266,7 +267,7 @@ export const TVGuideSearch: React.FC<TVGuideSearchProps> = ({ channels, triggerP
                   className="flex items-center gap-4 bg-[#1a1a1a] border border-[#333333] p-2 rounded-lg hover:border-[#FF6B35] hover:bg-[#2d2d2d] transition-all cursor-pointer group"
                 >
                   <div className="w-24 h-16 shrink-0 bg-black rounded overflow-hidden relative">
-                     {ch.logo && <img src={ch.logo} alt={ch.name} loading="lazy" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />}
+                     {ch.logo && <LazyChannelLogo src={ch.logo} alt={ch.name} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />}
                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/40 transition-opacity">
                        <Play className="w-6 h-6 text-[#FF6B35]" />
                      </div>

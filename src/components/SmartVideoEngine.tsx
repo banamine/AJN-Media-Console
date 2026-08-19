@@ -65,6 +65,7 @@ export const SmartVideoEngine: React.FC<SmartVideoEngineProps> = ({ url: initial
   
   // Drawer State
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [hasOpenedDrawer, setHasOpenedDrawer] = useState(false);
 
   // Rumble Iframe Heartbeat State
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -81,6 +82,13 @@ export const SmartVideoEngine: React.FC<SmartVideoEngineProps> = ({ url: initial
     
     if (!activeUrl) {
       setCurrentResolvedUrl(null);
+      setSequentialPlaylist([]);
+      setActiveQueue([]);
+      return;
+    }
+
+    if (activeUrl.toLowerCase().endsWith('.m3u') && !hasOpenedDrawer) {
+      setCurrentResolvedUrl(activeUrl);
       setSequentialPlaylist([]);
       setActiveQueue([]);
       return;
@@ -181,7 +189,7 @@ export const SmartVideoEngine: React.FC<SmartVideoEngineProps> = ({ url: initial
     };
     fetchM3u();
     return () => { isMounted = false; };
-  }, [activeUrl]);
+  }, [activeUrl, hasOpenedDrawer]);
 
   useEffect(() => {
     let isMounted = true;
@@ -571,10 +579,16 @@ export const SmartVideoEngine: React.FC<SmartVideoEngineProps> = ({ url: initial
         </div>
 
         {/* Hamburger to open drawer */}
-        {activeQueue.length > 0 && !isDrawerOpen && (
+        {(activeUrl.toLowerCase().endsWith('.m3u') || activeQueue.length > 0) && !isDrawerOpen && (
           <button 
-            onClick={() => setIsDrawerOpen(true)}
-            onMouseEnter={() => setIsDrawerOpen(true)}
+            onClick={() => {
+              setIsDrawerOpen(true);
+              setHasOpenedDrawer(true);
+            }}
+            onMouseEnter={() => {
+              setIsDrawerOpen(true);
+              setHasOpenedDrawer(true);
+            }}
             className="absolute top-4 right-4 z-40 p-2 bg-black/60 backdrop-blur rounded-lg border border-white/20 text-white shadow-lg cursor-pointer hover:bg-black/80 transition-all"
             title="Open Playlist Drawer"
           >
@@ -584,7 +598,7 @@ export const SmartVideoEngine: React.FC<SmartVideoEngineProps> = ({ url: initial
       </div>
       
       {/* Playlist UI Sidebar / Drawer */}
-      {activeQueue.length > 0 && (
+      {hasOpenedDrawer && activeQueue.length > 0 && (
         <div 
           onMouseLeave={() => setIsDrawerOpen(false)}
           className={`

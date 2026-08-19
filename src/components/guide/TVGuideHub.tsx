@@ -3,6 +3,7 @@ import { Search, Play, Radio, Info } from "lucide-react";
 import { CHANNEL_RANGES, ChannelRange } from "../../utils/channelRanges";
 import { resolveMediaStreamUrl } from "../../utils/urlUtils";
 import { TelemetryAudit } from "../../utils/TelemetryAudit";
+import { LazyChannelLogo } from "../LazyChannelLogo";
 
 import { List } from 'react-window';
 
@@ -93,6 +94,35 @@ export const TVGuideHub: React.FC<TVGuideHubProps> = ({ channels, triggerPlayout
 
     return groups;
   }, [filteredChannels]);
+
+  const [gridHeight, setGridHeight] = useState(600);
+  const gridContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!gridContainerRef.current) return;
+    const observer = new ResizeObserver(entries => {
+      if (entries[0]) {
+        setGridHeight(entries[0].contentRect.height);
+      }
+    });
+    observer.observe(gridContainerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const chunkedRows = useMemo(() => {
+    let sourceChannels = filteredChannels;
+    if (activeRange) {
+      const range = CHANNEL_RANGES.find(r => r.id === activeRange);
+      if (range) {
+        sourceChannels = filteredChannels.filter(ch => ch.num >= range.rangeStart && ch.num <= range.rangeEnd);
+      }
+    }
+    const rows = [];
+    for (let i = 0; i < sourceChannels.length; i += 3) {
+      rows.push(sourceChannels.slice(i, i + 3));
+    }
+    return rows;
+  }, [filteredChannels, activeRange]);
 
   const scrollToRange = (range: ChannelRange) => {
     if (range.id === "all") {
@@ -213,7 +243,7 @@ export const TVGuideHub: React.FC<TVGuideHubProps> = ({ channels, triggerPlayout
         <ChannelRangeSelector activeRange={activeRange} onSelectRange={scrollToRange} />
 
         {/* Grid Scroll Area */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-[#0f0f0f] custom-scrollbar">
+        <div className="flex-1 overflow-hidden p-4 sm:p-6 bg-[#0f0f0f]" ref={gridContainerRef}>
           {filteredChannels.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-[#707070] py-12">
               <Radio className="w-12 h-12 mb-4 opacity-50 text-[#FF6B35]" />
@@ -221,26 +251,18 @@ export const TVGuideHub: React.FC<TVGuideHubProps> = ({ channels, triggerPlayout
               <p className="text-sm mt-2">Try searching for a different network or category.</p>
             </div>
           ) : (
-            <div className="flex flex-col gap-8">
-              {CHANNEL_RANGES.map((range) => {
-                const rangeChannels = groupedChannels[range.id] || [];
-                if (rangeChannels.length === 0) return null;
-                if (activeRange && activeRange !== range.id) return null;
-
-                return (
-                  <section key={range.id} id={`range-${range.id}`}>
-                    <div className="sticky top-0 z-10 bg-[#0f0f0f]/95 backdrop-blur py-3 border-b border-[#333333] mb-4 flex items-center justify-between">
-                      <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-3">
-                        <span className="px-2 py-0.5 rounded bg-[#FF6B35]/20 text-[#FF6B35] border border-[#FF6B35]/30 text-xs font-mono tracking-wider">
-                          {range.rangeStart}-{range.rangeEnd}
-                        </span>
-                        <span className="uppercase tracking-widest">{range.label}</span>
-                      </h3>
-                      <span className="text-xs text-[#707070] font-mono">{rangeChannels.length} NETWORKS</span>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-3">
-                      {rangeChannels.map((ch, idx) => (
+            <div style={{ height: gridHeight || 600, width: "100%" }}>
+              <List
+                rowCount={chunkedRows.length}
+                rowHeight={310}
+                overscanCount={4}
+                rowProps={{}}
+                style={{ height: gridHeight || 600, overflowX: 'hidden' }}
+                rowComponent={({ index, style }: any) => {
+                  const rowChannels = chunkedRows[index];
+                  return (
+                    <div style={{ ...style, display: 'flex', gap: '12px', paddingBottom: '12px' }} key={index}>
+                      {rowChannels.map((ch: any, idx: number) => (
                         <div 
                           key={ch.id || idx} 
                           onClick={() => {
@@ -276,14 +298,13 @@ export const TVGuideHub: React.FC<TVGuideHubProps> = ({ channels, triggerPlayout
                               handleSelectChannel(ch);
                             }
                           }}
-                          className="group relative flex flex-col bg-[var(--surface-1)] border border-[var(--border)] rounded-[var(--radius-md)] overflow-hidden hover:border-[var(--accent)] transition-all duration-[var(--dur-med)] ease-[var(--ease-standard)] hover:shadow-[var(--shadow-glow)] shadow-[var(--shadow-soft)] cursor-pointer"
+                          className="group relative flex-1 flex flex-col bg-[var(--surface-1)] border border-[var(--border)] rounded-[var(--radius-md)] overflow-hidden hover:border-[var(--accent)] transition-all duration-[var(--dur-med)] ease-[var(--ease-standard)] hover:shadow-[var(--shadow-glow)] shadow-[var(--shadow-soft)] cursor-pointer h-[290px]"
                         >
                           <div className="aspect-video bg-[var(--surface-2)] relative overflow-hidden">
                             {ch.logo ? (
-                              <img 
+                              <LazyChannelLogo 
                                 src={ch.logo} 
                                 alt={ch.name}
-                                loading="lazy"
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[180ms] ease-[cubic-bezier(.2,.8,.2,1)]"
                               />
                             ) : (
@@ -324,10 +345,13 @@ export const TVGuideHub: React.FC<TVGuideHubProps> = ({ channels, triggerPlayout
                           </div>
                         </div>
                       ))}
+                      {rowChannels.length < 3 && Array.from({ length: 3 - rowChannels.length }).map((_, i) => (
+                        <div key={`empty-${i}`} className="flex-1 pointer-events-none" />
+                      ))}
                     </div>
-                  </section>
-                );
-              })}
+                  );
+                }}
+              />
             </div>
           )}
         </div>

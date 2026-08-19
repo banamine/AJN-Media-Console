@@ -10,29 +10,36 @@ interface LazyChannelLogoProps {
 export function LazyChannelLogo({
   src,
   alt = "",
-  className = "w-8 h-8 rounded-xl border border-slate-800 object-contain bg-[#050608]",
+  className = "w-8 h-8 rounded-xl border border-slate-800 object-contain bg-[#1a1a1a]",
   fallbackSrc = "https://archive.org/download/daily-highlights/lmbsa.png",
 }: LazyChannelLogoProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [currentSrc, setCurrentSrc] = useState<string | null>(null);
+  const prevSrcRef = useRef<string>(src);
   const elementRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Reset state on search or catalog changes
-    setIsLoaded(false);
-    setIsInView(false);
-    setCurrentSrc(null);
+    if (src !== prevSrcRef.current) {
+      prevSrcRef.current = src;
+      setIsLoaded(false);
+      if (isInView) {
+        setCurrentSrc(src);
+      }
+    }
+  }, [src, isInView]);
 
+  useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsInView(true);
+          setCurrentSrc(src);
           observer.disconnect();
         }
       },
       {
-        rootMargin: "80px", // prefetch when item is within 80px of view
+        rootMargin: "400px 0px", // prefetch 400px off-screen to eliminate pop-in and flashing on scroll/recycling
         threshold: 0.01,
       }
     );
@@ -47,29 +54,21 @@ export function LazyChannelLogo({
     };
   }, [src]);
 
-  useEffect(() => {
-    if (isInView && src) {
-      setCurrentSrc(src);
-    }
-  }, [isInView, src]);
-
   return (
     <div 
       ref={elementRef} 
-      className={`relative overflow-hidden shrink-0 ${className} flex items-center justify-center`}
+      className={`relative overflow-hidden shrink-0 ${className} flex items-center justify-center bg-[#1a1a1a]`}
     >
-      {/* CSS-Based Skeleton Loader State (Pulsing backplate + minimalist indicator) */}
+      {/* Smooth dark placeholder background to prevent white flashes during recycling */}
       {!isLoaded && (
-        <div className="absolute inset-0 bg-slate-900 animate-pulse flex items-center justify-center" aria-hidden="true">
-          <div className="w-1.5 h-1.5 rounded-full bg-slate-700 animate-ping" />
-        </div>
+        <div className="absolute inset-0 bg-[#1a1a1a] flex items-center justify-center" aria-hidden="true" />
       )}
 
       {currentSrc && (
         <img
           src={currentSrc}
           alt={alt}
-          className={`w-full h-full object-contain transition-opacity duration-300 ${
+          className={`w-full h-full object-contain transition-opacity duration-200 ${
             isLoaded ? "opacity-100" : "opacity-0"
           }`}
           onLoad={() => setIsLoaded(true)}

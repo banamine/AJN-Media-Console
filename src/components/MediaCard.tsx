@@ -5,6 +5,7 @@
 
 import React, { useState } from "react";
 import { UnifiedMediaItem } from "../types";
+import { LazyChannelLogo } from "./LazyChannelLogo";
 
 export interface MediaCardProps {
   item: UnifiedMediaItem;
@@ -35,13 +36,11 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-900/40 hover:bg-slate-800/60 border border-slate-800/80 transition-all cursor-pointer group"
       >
         <div className="w-16 h-10 rounded-xl bg-black/50 overflow-hidden shrink-0 relative flex items-center justify-center">
-          <img 
+          <LazyChannelLogo 
             src={thumbnailSrc} 
             alt={item.title}
-            onError={() => setImgError(true)}
+            fallbackSrc={fallbackImg}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            referrerPolicy="no-referrer"
-            loading="lazy"
           />
           {item.live && (
             <span className="absolute top-0.5 right-0.5 px-1 py-0.2 bg-red-600 text-white text-[8px] font-mono font-bold rounded">
@@ -93,13 +92,11 @@ export const MediaCard: React.FC<MediaCardProps> = ({
       className="flex flex-col rounded-xl bg-slate-900/50 hover:bg-slate-800/80 border border-slate-800 hover:border-slate-700 overflow-hidden transition-all duration-300 cursor-pointer group shadow-lg"
     >
       <div className="aspect-video bg-[#05070a] relative overflow-hidden flex items-center justify-center">
-        <img 
+        <LazyChannelLogo 
           src={thumbnailSrc} 
           alt={item.title}
-          onError={() => setImgError(true)}
+          fallbackSrc={fallbackImg}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          referrerPolicy="no-referrer"
-          loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
         

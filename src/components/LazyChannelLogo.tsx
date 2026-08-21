@@ -7,36 +7,46 @@ interface LazyChannelLogoProps {
   fallbackSrc?: string;
 }
 
+// Module-level cache to permanently remember broken image URLs across mounts, re-renders, and virtualized list recycling
+const failedImageUrls = new Set<string>();
+
 export function LazyChannelLogo({
   src,
   alt = "",
   className = "w-8 h-8 rounded-xl border border-slate-800 object-contain bg-[#1a1a1a]",
   fallbackSrc = "https://archive.org/download/daily-highlights/lmbsa.png",
 }: LazyChannelLogoProps) {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const isKnownBroken = failedImageUrls.has(src);
+  const [isLoaded, setIsLoaded] = useState(isKnownBroken);
   const [isInView, setIsInView] = useState(false);
-  const [currentSrc, setCurrentSrc] = useState<string | null>(null);
-  const prevSrcRef = useRef<string>(src);
+  const [currentSrc, setCurrentSrc] = useState<string | null>(
+    isKnownBroken ? fallbackSrc : null
+  );
   const elementRef = useRef<HTMLDivElement>(null);
 
+  // Handle src changes and crossfade reset for both on-screen and off-screen states
   useEffect(() => {
-    if (src !== prevSrcRef.current) {
-      prevSrcRef.current = src;
+    if (failedImageUrls.has(src)) {
+      if (currentSrc !== fallbackSrc) {
+        setCurrentSrc(fallbackSrc);
+        setIsLoaded(true);
+      }
+      return;
+    }
+
+    if (src !== currentSrc) {
       setIsLoaded(false);
       if (isInView) {
         setCurrentSrc(src);
       }
     }
-  }, [src, isInView]);
+  }, [src, isInView, currentSrc, fallbackSrc]);
 
+  // IntersectionObserver lifecycle fully decoupled from src (empty dependency array)
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          setCurrentSrc(src);
-          observer.disconnect();
-        }
+        setIsInView(entry.isIntersecting);
       },
       {
         rootMargin: "400px 0px", // prefetch 400px off-screen to eliminate pop-in and flashing on scroll/recycling
@@ -52,7 +62,7 @@ export function LazyChannelLogo({
     return () => {
       observer.disconnect();
     };
-  }, [src]);
+  }, []);
 
   return (
     <div 
@@ -74,6 +84,7 @@ export function LazyChannelLogo({
           onLoad={() => setIsLoaded(true)}
           onError={(e) => {
             e.currentTarget.onerror = null;
+            failedImageUrls.add(src);
             setCurrentSrc(fallbackSrc);
             setIsLoaded(true);
           }}

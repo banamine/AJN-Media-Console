@@ -260,10 +260,13 @@ export const BroadcastTVGuide = React.memo(function BroadcastTVGuide({
   stopPreludeMusic
 }: BroadcastTVGuideProps) {
   const [discoveredChannels, setDiscoveredChannels] = useState<any[]>(() => [
-    { id: "liberty-express-1", channelId: "liberty-express-1", num: 100, name: "📻 Liberty Express Live (CH 1)", url: "https://archive.org/download/daily-highlights/Liberty_Express_Live (1).m3u", staggerOffsetPercent: 0.0, size: "N/A" },
-    { id: "liberty-express-2", channelId: "liberty-express-2", num: 101, name: "📻 Liberty Express Live (CH 2)", url: "https://archive.org/download/daily-highlights/Liberty_Express_Live (2).m3u", staggerOffsetPercent: 0.25, size: "N/A" },
-    { id: "liberty-express-3", channelId: "liberty-express-3", num: 102, name: "📻 Liberty Express Live (CH 3)", url: "https://archive.org/download/daily-highlights/Liberty_Express_Live (3).m3u", staggerOffsetPercent: 0.5, size: "N/A" },
-    { id: "ajn-archives", channelId: "ajn-archives", num: 103, name: "📂 AJN Archives (CH 4)", url: "https://archive.org/download/daily-highlights/AJN archive 1.m3u", staggerOffsetPercent: 0.75, size: "N/A" }
+    { id: "info-survivor", channelId: "info-survivor", num: 90, name: "📺 Info Survivor", url: "https://archive.org/download/daily-highlights/Info%20Survior.m3u", staggerOffsetPercent: 0.0, size: "N/A" },
+    { id: "alex-24", channelId: "alex-24", num: 91, name: "📺 Alex 24 News", url: "https://archive.org/download/daily-highlights/Alex%2024.m3u", staggerOffsetPercent: 0.25, size: "N/A" },
+    { id: "super-alex", channelId: "super-alex", num: 92, name: "📺 Super Alex Jones Archive", url: "https://archive.org/download/daily-highlights/Super%20Alex%20Jones%20Archive.m3u", staggerOffsetPercent: 0.5, size: "N/A" },
+    { id: "liberty-express-1", channelId: "liberty-express-1", num: 100, name: "📻 Liberty Express Live (CH 1)", url: "https://archive.org/download/daily-highlights/Liberty_Express_Live (1).m3u", staggerOffsetPercent: 0.75, size: "N/A" },
+    { id: "liberty-express-2", channelId: "liberty-express-2", num: 101, name: "📻 Liberty Express Live (CH 2)", url: "https://archive.org/download/daily-highlights/Liberty_Express_Live (2).m3u", staggerOffsetPercent: 0.0, size: "N/A" },
+    { id: "liberty-express-3", channelId: "liberty-express-3", num: 102, name: "📻 Liberty Express Live (CH 3)", url: "https://archive.org/download/daily-highlights/Liberty_Express_Live (3).m3u", staggerOffsetPercent: 0.25, size: "N/A" },
+    { id: "ajn-archives", channelId: "ajn-archives", num: 103, name: "📂 AJN Archives (CH 4)", url: "https://archive.org/download/daily-highlights/AJN archive 1.m3u", staggerOffsetPercent: 0.5, size: "N/A" }
   ]);
   const [discoverySource, setDiscoverySource] = useState<string>("static_init");
 

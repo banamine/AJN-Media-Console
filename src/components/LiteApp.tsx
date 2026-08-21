@@ -755,17 +755,14 @@ export const LiteApp = React.memo(function LiteApp({
     
     if (!hasCompletedOnboarding) {
       setShowWizard(true);
-      // DO NOT initialize streams here
       return;
     }
 
-    // Only safe to initialize streams AFTER onboarding is bypassed
     setShowWizard(false);
     
-    if (false) {
-      
-    } else if (!currentUrl) {
-      
+    if (lastSession && !currentUrl) {
+      addLog(`[Session Restore] Resuming last channel: ${lastSession.name}`, "info");
+      playStream(lastSession.url, lastSession.name, lastSession.currentTime);
     }
   }, []);
 
@@ -1777,7 +1774,10 @@ export const LiteApp = React.memo(function LiteApp({
                     <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shrink-0" />
                   )}
                   <span className={`text-xs font-black text-slate-200 truncate font-mono ${activeNav !== "player" ? "text-[10px]" : ""}`}>
-                    {currentTitle || "Idle Streaming Pipeline"}
+                    {currentTitle || (() => {
+                      const dateStr = new Intl.DateTimeFormat('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(new Date());
+                      return `Daily master playout files can play in the Daily Master Playout. EPG logs for ${dateStr}: 11:00 60 min Infowars Live Hour 1, Alex Jones Show Hour 1, live commentary on geopolitical breaking events and intelligence summaries. Geopolitics Hour 1 through all hours, and then War Room all hours play here. Daily files load and play daily files only. The date-of or day-before files are loaded to run. It can play the files here`;
+                    })()}
                   </span>
                 </div>
                 

@@ -85,68 +85,23 @@ function extractSeriesName(title: string, defaultGroup: string): string {
 }
 
 self.onmessage = async (e: MessageEvent<{ rawContent: string, baseUrl?: string }>) => {
-  const { rawContent, baseUrl } = e.data;
-  const channels = parseM3UPlaylistString(rawContent, baseUrl);
-  
   try {
-    // Attempt to sync to IndexedDB directly from the worker to save main thread time
-    if (self.indexedDB) {
-      const dbRequest = self.indexedDB.open("AJN_IPTV_DATABASE");
-      dbRequest.onsuccess = () => {
-        const db = dbRequest.result;
-        // Verify store exists
-        if (db.objectStoreNames.contains("channels")) {
-          const transaction = db.transaction("channels", "readwrite");
-          const store = transaction.objectStore("channels");
-          
-          // Deduplicate
-          const seenUrls = new Set<string>();
-          const uniqueChannels: IPTVChannel[] = [];
-          for (let i = channels.length - 1; i >= 0; i--) {
-            const chan = channels[i];
-            if (chan.url && !seenUrls.has(chan.url)) {
-              seenUrls.add(chan.url);
-              uniqueChannels.unshift(chan);
-            }
-          }
-
-          // We use small chunks to not block the worker thread entirely
-          const chunkSize = 1000;
-          for (let i = 0; i < uniqueChannels.length; i += chunkSize) {
-            const chunk = uniqueChannels.slice(i, i + chunkSize);
-            for (const c of chunk) {
-               store.put(c);
-            }
-          }
-          
-          transaction.oncomplete = () => {
-            self.postMessage({ channels: uniqueChannels, syncComplete: true });
-          };
-          transaction.onerror = () => {
-             self.postMessage({ channels: uniqueChannels, syncComplete: false, error: "Transaction error" });
-          };
-        } else {
-           self.postMessage({ channels, syncComplete: false, error: "Store not found" });
-        }
-      };
-      dbRequest.onerror = () => {
-        self.postMessage({ channels, syncComplete: false, error: "DB open error" });
-      };
-    } else {
-      // Deduplicate for non-IndexedDB environments as well
-      const seenUrls = new Set<string>();
-      const uniqueChannels: IPTVChannel[] = [];
-      for (let i = channels.length - 1; i >= 0; i--) {
-        const chan = channels[i];
-        if (chan.url && !seenUrls.has(chan.url)) {
-          seenUrls.add(chan.url);
-          uniqueChannels.unshift(chan);
-        }
+    const { rawContent, baseUrl } = e.data;
+    const channels = parseM3UPlaylistString(rawContent, baseUrl);
+    
+    const seenUrls = new Set<string>();
+    const uniqueChannels: IPTVChannel[] = [];
+    for (let i = channels.length - 1; i >= 0; i--) {
+      const chan = channels[i];
+      if (chan.url && !seenUrls.has(chan.url)) {
+        seenUrls.add(chan.url);
+        uniqueChannels.unshift(chan);
       }
-      self.postMessage({ channels: uniqueChannels, syncComplete: false, error: "IndexedDB not available in worker" });
     }
+    
+    self.postMessage({ channels: uniqueChannels });
   } catch (err) {
-    self.postMessage({ channels, syncComplete: false, error: err instanceof Error ? err.message : String(err) });
+    self.postMessage({ channels: [], error: err instanceof Error ? err.message : String(err) });
   }
 };
 

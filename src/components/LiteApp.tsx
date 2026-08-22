@@ -80,6 +80,31 @@ const BACKEND_URL = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_URL || 
 
 
 const archiveBreaker = new PlaybackCircuitBreaker(3, 15000);
+// This build was compiled for the static GitHub Pages deployment
+// (VITE_STATIC_DEMO=true is set only in .github/workflows/deploy.yml).
+// Pages serves pre-built static files with no Express backend, so every
+// feature that routes through server.ts (/api/stream-proxy, Rumble
+// ingestion, /api/sync/push, the podcast tuner API, news harvest) is
+// structurally unavailable here -- not a bug, just this build target.
+// See README.md "Deployment Targets" for the full writeup.
+const IS_STATIC_DEMO_BUILD = (import.meta as any).env?.VITE_STATIC_DEMO === "true";
+
+function StaticDemoBanner({ onDismiss }: { onDismiss: () => void }) {
+  return (
+    <div className="w-full shrink-0 z-[110] bg-amber-500/10 border-b border-amber-500/30 text-amber-200 text-[11px] md:text-xs font-mono px-4 py-2 flex items-center justify-between gap-3">
+      <span className="leading-relaxed">
+        <strong className="font-bold">Static preview build.</strong> This GitHub Pages deployment has no backend, so proxy-routed streams (M3U/IPTV imports, Rumble ingestion, cross-device sync) won't load here. For the full app, use the hosted deployment.
+      </span>
+      <button
+        onClick={onDismiss}
+        className="shrink-0 px-2 py-1 rounded-md border border-amber-500/40 hover:bg-amber-500/20 transition-colors uppercase tracking-wide text-[10px] font-bold cursor-pointer"
+      >
+        Dismiss
+      </button>
+    </div>
+  );
+}
+
 
 const getDynamicM3U = (): string => {
   const now = new Date();
@@ -214,6 +239,22 @@ export const LiteApp = React.memo(function LiteApp({
   });
 
   const [showDiagnosticsDrawer, setShowDiagnosticsDrawer] = useState<boolean>(false);
+  const [showStaticDemoBanner, setShowStaticDemoBanner] = useState<boolean>(() => {
+    if (!IS_STATIC_DEMO_BUILD) return false;
+    try {
+      return safeLocalStorage.getItem("ajn_static_demo_banner_dismissed") !== "true";
+    } catch {
+      return true;
+    }
+  });
+
+  const dismissStaticDemoBanner = useCallback(() => {
+    setShowStaticDemoBanner(false);
+    try {
+      safeLocalStorage.setItem("ajn_static_demo_banner_dismissed", "true");
+    } catch {}
+  }, []);
+
 
   const toggleExpertMode = useCallback(() => {
     setShowExpertMode(prev => {
@@ -1103,6 +1144,8 @@ export const LiteApp = React.memo(function LiteApp({
       onPointerDown={handleFirstInteractionUnmute}
       className={`min-h-screen flex flex-col font-sans transition-all duration-300 antialiased select-none ${theme === "light" ? "text-slate-800 bg-slate-50" : "text-slate-200 bg-[#000000]"}`}
     >
+      {showStaticDemoBanner && <StaticDemoBanner onDismiss={dismissStaticDemoBanner} />}
+
       {/* P0 fix: this was min-h-screen (a floor, no ceiling) with no overflow
           constraint, so the whole page could grow past the viewport whenever
           any deeply-nested content overflowed. Now locked to the viewport

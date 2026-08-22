@@ -34,6 +34,10 @@ jobs:
         run: npm run build
         env:
           VITE_BASE: /AJN-Media-Console/
+          # Compiled into the client bundle so the app can detect it's running
+          # as the static Pages build (no Express backend) and show a banner.
+          # See README.md "Deployment Targets".
+          VITE_STATIC_DEMO: 'true'
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact

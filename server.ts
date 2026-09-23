@@ -619,30 +619,41 @@ express.static.mime.define({'application/javascript': ['js', 'cjs', 'mjs']});
     return unique;
   }
 
-  // ClassifyNewsSource logic: map matched items to their channel branding and metadata
+  // Classify each accepted item against the profile that owns the record.
   function classifyNewsSource(title: string, url: string, profile: any) {
-    const lowerTitle = title.toLowerCase();
-    const lowerUrl = url.toLowerCase();
-
-    // Iterate through NEWS_REGISTRY to find correct logoUrl and metadata
-    for (const [key, meta] of Object.entries(NEWS_REGISTRY)) {
-      const keyword = key.toLowerCase();
-      if (lowerTitle.includes(keyword) || lowerUrl.includes(keyword) || profile.callsign.toLowerCase().includes(keyword)) {
-        return {
-          profileId: key,
-          logoUrl: meta.logoUrl,
-          displayName: meta.displayName
-        };
-      }
-    }
-
-    // Fallback to the profile's own values if none matches
-    const regInfo = NEWS_REGISTRY[profile.id] || { displayName: profile.displayName, logoUrl: profile.logoUrl };
+    const regInfo = NEWS_REGISTRY[profile.id] || {
+      displayName: profile.displayName,
+      logoUrl: profile.logoUrl
+    };
     return {
       profileId: profile.id,
       logoUrl: regInfo.logoUrl || profile.logoUrl || "https://raw.githubusercontent.com/banamine/AJN-Resource-Hub/main/ajn_logo.png",
       displayName: regInfo.displayName || profile.displayName
     };
+  }
+
+  function newsProfileMatches(profile: any, title: string, url: string, guid: string): boolean {
+    const haystack = `${title} ${url} ${guid}`.toLowerCase();
+    const aliases: Record<string, string[]> = {
+      CNNW: ["cnnw", "cnn"],
+      FOXNEWSW: ["foxnewsw", "fox news", "foxnews"],
+      MSNBCW: ["msnbcw", "msnbc"],
+      BBCNEWS: ["bbcnews", "bbc news"],
+      NTD: ["ntd"]
+    };
+    const profileAliases = aliases[String(profile.callsign || "").toUpperCase()] || [String(profile.callsign || "").toLowerCase()];
+    return profileAliases.some(alias => alias && haystack.includes(alias));
+  }
+
+  function parseNewsTimestamp(raw: string, profile: any): number | null {
+    const trimmed = String(raw || "").trim();
+    if (!trimmed) return null;
+    const timestamp = Date.parse(trimmed);
+    if (!Number.isFinite(timestamp)) {
+      console.warn(`[NewsBot] Invalid pubDate for ${profile.callsign}: ${trimmed}`);
+      return null;
+    }
+    return timestamp;
   }
 
   // NewsBot 12-hour News Harvest Cycle
@@ -701,10 +712,12 @@ express.static.mime.define({'application/javascript': ['js', 'cjs', 'mjs']});
                 const title = String(item.title || item.headline || "").trim();
                 const videoUrl = String(item.url || item.enclosure || item.video || item.link || "").trim();
                 const pubDateStr = String(item.pubDate || item.date || item.timestamp || "");
-                const pubDate = pubDateStr ? new Date(pubDateStr) : new Date();
-                if (videoUrl.startsWith("http")) {
-                  const remastered = remasterHeadline(title, videoUrl);
-                  rawEpisodes.push({ title: remastered, url: videoUrl, timestamp: pubDate.getTime() });
+                if (videoUrl.startsWith("http") && newsProfileMatches(profile, title, videoUrl, String(item.guid || item.id || ""))) {
+                  const timestamp = parseNewsTimestamp(pubDateStr, profile);
+                  if (timestamp !== null) {
+                    const remastered = remasterHeadline(title, videoUrl);
+                    rawEpisodes.push({ title: remastered, url: videoUrl, timestamp });
+                  }
                 }
               }
             } catch (jsonErr: any) {
@@ -719,43 +732,43 @@ express.static.mime.define({'application/javascript': ['js', 'cjs', 'mjs']});
                 const title = cols[0].trim();
                 const videoUrl = cols[1].trim();
                 const pubDateStr = cols[2] ? cols[2].trim() : "";
-                const pubDate = pubDateStr ? new Date(pubDateStr) : new Date();
-                if (videoUrl.startsWith("http")) {
-                  const remastered = remasterHeadline(title, videoUrl);
-                  rawEpisodes.push({ title: remastered, url: videoUrl, timestamp: pubDate.getTime() });
+                if (videoUrl.startsWith("http") && newsProfileMatches(profile, title, videoUrl, "")) {
+                  const timestamp = parseNewsTimestamp(pubDateStr, profile);
+                  if (timestamp !== null) {
+                    const remastered = remasterHeadline(title, videoUrl);
+                    rawEpisodes.push({ title: remastered, url: videoUrl, timestamp });
+                  }
                 }
               }
             }
           } else {
-            // Default: RSS XML parsing via regex
-            const itemRegex = /<item>([\s\S]*?)<\/item>/g;
+            // Default: RSS XML parsing. Accept GUID/id variants and never invent timestamps.
+            const itemRegex = /<item\b[^>]*>([\s\S]*?)<\/item>/gi;
             let match;
             while ((match = itemRegex.exec(xmlText)) !== null) {
               const itemContent = match[1];
 
-              let title = "";
-              const titleMatch = itemContent.match(/<title>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>/);
-              if (titleMatch) title = titleMatch[1].trim();
+              const readTag = (tag: string): string => {
+                const re = new RegExp(`<${tag}\\b[^>]*>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${tag}>`, "i");
+                const m = itemContent.match(re);
+                return m ? m[1].trim() : "";
+              };
 
+              const title = readTag("title");
+              const guid = readTag("guid") || readTag("id");
               let videoUrl = "";
-              const enclosureMatch = itemContent.match(/<enclosure[^>]*url="([^"]+)"/);
-              if (enclosureMatch) {
-                videoUrl = enclosureMatch[1].trim();
-              } else {
-                const linkMatch = itemContent.match(/<link>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/link>/);
-                if (linkMatch) videoUrl = linkMatch[1].trim();
-              }
+              const enclosureMatch = itemContent.match(/<enclosure\\b[^>]*url=["']([^"']+)["']/i);
+              videoUrl = enclosureMatch ? enclosureMatch[1].trim() : readTag("link");
+              const pubDateStr = readTag("pubDate") || readTag("published") || readTag("updated");
 
-              if (!videoUrl) continue;
+              if (!videoUrl || !/^https?:\/\//i.test(videoUrl)) continue;
+              if (!newsProfileMatches(profile, title, videoUrl, guid)) continue;
 
-              let pubDateStr = "";
-              const pubDateMatch = itemContent.match(/<pubDate>([\s\S]*?)<\/pubDate>/);
-              if (pubDateMatch) pubDateStr = pubDateMatch[1].trim();
+              const timestamp = parseNewsTimestamp(pubDateStr, profile);
+              if (timestamp === null) continue;
 
-              const pubDate = pubDateStr ? new Date(pubDateStr) : new Date();
-              
               const remastered = remasterHeadline(title, videoUrl);
-              rawEpisodes.push({ title: remastered, url: videoUrl, timestamp: pubDate.getTime() });
+              rawEpisodes.push({ title: remastered, url: videoUrl, timestamp });
             }
           }
 

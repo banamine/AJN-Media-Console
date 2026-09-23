@@ -87,8 +87,10 @@ export async function initDatabase() {
 function seedDefaultProfiles() {
   const defaults: NewsProfile[] = [
     { id: "bbc", callsign: "BBCNEWS", displayName: "BBC News", logoUrl: "https://raw.githubusercontent.com/banamine/AJN-Resource-Hub/main/bbc_logo.png", rssUrl: "https://rss.alexjones.media/AJNHourlyVideo.xml", isActive: true, lastHarvested: null },
-    { id: "cnn", callsign: "CNNNEWS", displayName: "CNN News", logoUrl: "https://raw.githubusercontent.com/banamine/AJN-Resource-Hub/main/cnn_logo.png", rssUrl: "https://rss.alexjones.media/AJNHourlyVideo.xml", isActive: true, lastHarvested: null },
-    { id: "fox", callsign: "FOXNEWSW", displayName: "Fox News", logoUrl: "https://raw.githubusercontent.com/banamine/AJN-Resource-Hub/main/fox_logo.png", rssUrl: "https://rss.alexjones.media/AJNHourlyVideo.xml", isActive: true, lastHarvested: null }
+    { id: "cnn", callsign: "CNNW", displayName: "CNN News", logoUrl: "https://raw.githubusercontent.com/banamine/AJN-Resource-Hub/main/cnn_logo.png", rssUrl: "https://rss.alexjones.media/AJNHourlyVideo.xml", isActive: true, lastHarvested: null },
+    { id: "fox", callsign: "FOXNEWSW", displayName: "Fox News", logoUrl: "https://raw.githubusercontent.com/banamine/AJN-Resource-Hub/main/fox_logo.png", rssUrl: "https://rss.alexjones.media/AJNHourlyVideo.xml", isActive: true, lastHarvested: null },
+    { id: "msnbc", callsign: "MSNBCW", displayName: "MSNBC", logoUrl: "https://raw.githubusercontent.com/banamine/AJN-Resource-Hub/main/msnbc_logo.png", rssUrl: "https://rss.alexjones.media/AJNHourlyVideo.xml", isActive: true, lastHarvested: null },
+    { id: "ntd", callsign: "NTD", displayName: "NTD News", logoUrl: "https://raw.githubusercontent.com/banamine/AJN-Resource-Hub/main/ntd_logo.png", rssUrl: "https://rss.alexjones.media/AJNHourlyVideo.xml", isActive: true, lastHarvested: null }
   ];
 
   for (const p of defaults) {

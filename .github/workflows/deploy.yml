@@ -1,45 +1,58 @@
-name: Deploy to GitHub Pages
+name: Deploy AJN to Cloud Run
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: "ajn-cloud-run"
   cancel-in-progress: true
+
+env:
+  GCP_PROJECT_ID: ais-us-east1-e01c512335244320b
+  GCP_REGION: us-east1
+  CLOUD_RUN_SERVICE: ais-dev-22ngduihbs737dbjc6habr
+  GAR_REPOSITORY: ajn
+  IMAGE_NAME: ajn-media-console
 
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
         with:
-          node-version: 24
-          cache: 'npm'
-      - name: Install dependencies
-        run: npm install
-      - name: Build
-        run: npm run build
-        env:
-          VITE_BASE: /AJN-Media-Console/
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: './dist'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker ${GCP_REGION}-docker.pkg.dev --quiet
+
+      - name: Build container
+        run: docker build --tag "${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${GAR_REPOSITORY}/${IMAGE_NAME}:${GITHUB_SHA}" .
+
+      - name: Push container
+        run: docker push "${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${GAR_REPOSITORY}/${IMAGE_NAME}:${GITHUB_SHA}"
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy "${CLOUD_RUN_SERVICE}"             --project="${GCP_PROJECT_ID}"             --region="${GCP_REGION}"             --image="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${GAR_REPOSITORY}/${IMAGE_NAME}:${GITHUB_SHA}"             --platform=managed             --quiet
+
+      - name: Verify deployment
+        run: |
+          URL="$(gcloud run services describe "${CLOUD_RUN_SERVICE}"             --project="${GCP_PROJECT_ID}"             --region="${GCP_REGION}"             --format='value(status.url)')"
+          REVISION="$(gcloud run services describe "${CLOUD_RUN_SERVICE}"             --project="${GCP_PROJECT_ID}"             --region="${GCP_REGION}"             --format='value(status.latestReadyRevisionName)')"
+          echo "Cloud Run URL: ${URL}"
+          echo "Revision: ${REVISION}"
+          curl --fail --silent --show-error --retry 5 --retry-delay 5 "${URL}/api/health"

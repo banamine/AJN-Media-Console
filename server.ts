@@ -743,7 +743,7 @@ express.static.mime.define({'application/javascript': ['js', 'cjs', 'mjs']});
             }
           } else {
             // Default: RSS XML parsing. Accept GUID/id variants and never invent timestamps.
-            const itemRegex = /<item\\b[^>]*>([\\s\\S]*?)<\\/item>/gi;
+            const itemRegex = /<item\b[^>]*>([\s\S]*?)<\/item>/gi;
             let match;
             while ((match = itemRegex.exec(xmlText)) !== null) {
               const itemContent = match[1];
@@ -761,7 +761,7 @@ express.static.mime.define({'application/javascript': ['js', 'cjs', 'mjs']});
               videoUrl = enclosureMatch ? enclosureMatch[1].trim() : readTag("link");
               const pubDateStr = readTag("pubDate") || readTag("published") || readTag("updated");
 
-              if (!videoUrl || !/^https?:\\/\\//i.test(videoUrl)) continue;
+              if (!videoUrl || !/^https?:\/\//i.test(videoUrl)) continue;
               if (!newsProfileMatches(profile, title, videoUrl, guid)) continue;
 
               const timestamp = parseNewsTimestamp(pubDateStr, profile);

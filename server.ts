@@ -749,7 +749,7 @@ express.static.mime.define({'application/javascript': ['js', 'cjs', 'mjs']});
               const itemContent = match[1];
 
               const readTag = (tag: string): string => {
-                const re = new RegExp(`<${tag}\\\\b[^>]*>(?:<!\\\\[CDATA\\\\[)?([\\\\s\\\\S]*?)(?:\\\\]\\\\]>)?<\\\\/${tag}>`, "i");
+                const re = new RegExp(`<${tag}\\b[^>]*>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${tag}>`, "i");
                 const m = itemContent.match(re);
                 return m ? m[1].trim() : "";
               };

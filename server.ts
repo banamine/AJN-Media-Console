@@ -770,22 +770,6 @@ express.static.mime.define({'application/javascript': ['js', 'cjs', 'mjs']});
               const remastered = remasterHeadline(title, videoUrl);
               rawEpisodes.push({ title: remastered, url: videoUrl, timestamp });
             }
-          } else {
-                const linkMatch = itemContent.match(/<link>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/link>/);
-                if (linkMatch) videoUrl = linkMatch[1].trim();
-              }
-
-              if (!videoUrl) continue;
-
-              let pubDateStr = "";
-              const pubDateMatch = itemContent.match(/<pubDate>([\s\S]*?)<\/pubDate>/);
-              if (pubDateMatch) pubDateStr = pubDateMatch[1].trim();
-
-              const pubDate = pubDateStr ? new Date(pubDateStr) : new Date();
-              
-              const remastered = remasterHeadline(title, videoUrl);
-              rawEpisodes.push({ title: remastered, url: videoUrl, timestamp: pubDate.getTime() });
-            }
           }
 
           // Apply Jaquith Algorithm headline deduplication
